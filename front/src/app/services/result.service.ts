@@ -22,7 +22,7 @@ export interface ResultResponse {
 })
 export class ResultService {
 
-  private baseUrl = 'http://localhost:8080/lab4/results';
+  private baseUrl = 'http://localhost:8080/lab_4/results';
 
   constructor(private http: HttpClient) {}
 
