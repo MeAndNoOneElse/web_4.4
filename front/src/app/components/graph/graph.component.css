@@ -1,0 +1,7 @@
+.graph-canvas {
+  border: 1px solid #ddd;
+  cursor: crosshair;
+  width: 100%;
+  max-width: 400px;
+  display: block;
+}

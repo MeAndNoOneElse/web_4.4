@@ -1,0 +1,28 @@
+<div class="table-wrapper">
+  <table class="results-table" *ngIf="results.length > 0; else empty">
+    <thead>
+    <tr>
+      <th>X</th>
+      <th>Y</th>
+      <th>R</th>
+      <th>Попадание</th>
+      <th>Время</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let result of results">
+      <td>{{ result.x }}</td>
+      <td>{{ result.y }}</td>
+      <td>{{ result.r }}</td>
+      <td [ngClass]="{ hit: result.hit, miss: !result.hit }">
+        {{ result.hit ? 'Да' : 'Нет' }}
+      </td>
+      <td>{{ result.createdAt }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <ng-template #empty>
+    <p class="empty-message">Результатов нет</p>
+  </ng-template>
+</div>

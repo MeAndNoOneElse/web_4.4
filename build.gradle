@@ -1,20 +1,94 @@
 plugins {
     id 'java'
+    id 'war'
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'code'
+group = 'app'
 version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Spring Data + Validation
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Security (пароли, JWT-фильтры и т.п.)
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // REST через Jersey (JAX-RS)
+    implementation 'org.springframework.boot:spring-boot-starter-jersey'
+
+    // JSF (Mojarra, реализация FacesServlet + рендер XHTML)
+    implementation 'org.glassfish:jakarta.faces:4.0.1'
+
+    // PrimeFaces (компоненты JSF, если будешь использовать)
+    implementation 'org.primefaces:primefaces:14.0.0:jakarta'
+
+    // JPA/Jakarta API (часть jakartaee, но здесь JPA уже есть в starter-data-jpa, так что достаточно CDI/Web API как compileOnly)
+    compileOnly 'jakarta.platform:jakarta.jakartaee-web-api:10.0.0'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+
+    // PostgreSQL
+    runtimeOnly 'org.postgresql:postgresql:42.7.7'
+
+    // Jackson Java Time
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    // dotenv (если читаешь .env)
+    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    // JSTL (если нужны <c:...> тэги в JSP/XHTML)
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-test {
+tasks.named('test') {
     useJUnitPlatform()
+}
+
+// Собираем WAR
+war {
+    archiveFileName = 'lab_4.war'
+    enabled = true
+}
+
+// Отключаем bootJar — только WAR
+tasks.named('bootJar') {
+    enabled = false
+}
+
+// Для работы Facelets (опционально, если нужно)
+bootRun {
+    systemProperty "jakarta.faces.FACELETS_LIBRARIES", "META-INF/faces-config.xml"
+}
+
+// Главный класс Spring Boot
+springBoot {
+    mainClass = 'app.Application'
 }

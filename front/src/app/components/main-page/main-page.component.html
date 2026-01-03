@@ -1,0 +1,78 @@
+<div class="container">
+  <!-- Шапка -->
+  <header class="header">
+    <div class="header-info">
+      <h1>{{ studentName }}</h1>
+      <p>Группа: {{ groupNumber }} | Вариант: {{ variant }}</p>
+    </div>
+    <button class="btn-logout" (click)="logout()">Выйти</button>
+  </header>
+
+  <!-- Основной контент -->
+  <main class="main-content">
+    <!-- Блок с формой и графиком -->
+    <div class="section form-and-graph">
+      <div class="form-block">
+        <h2>Введите координаты</h2>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label>X:</label>
+            <div class="checkbox-group">
+              <label *ngFor="let val of xOptions" class="checkbox-label">
+                <input type="radio" formControlName="x" [value]="val" />
+                {{ val }}
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="y">Y (от -3 до 3):</label>
+            <input
+              id="y"
+              type="number"
+              formControlName="y"
+              min="-3"
+              max="3"
+              step="0.1"
+              class="input-field"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>R:</label>
+            <div class="checkbox-group">
+              <label *ngFor="let val of rOptions" class="checkbox-label">
+                <input type="radio" formControlName="r" [value]="val" />
+                {{ val }}
+              </label>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="form.invalid"
+            class="btn-primary"
+          >
+            Проверить точку
+          </button>
+        </form>
+      </div>
+
+      <!-- Графический компонент -->
+      <div class="graph-block">
+        <h2>График</h2>
+        <app-graph
+          [results]="results"
+          [radius]="selectedR"
+          (pointClicked)="onPointClicked($event)"
+        ></app-graph>
+      </div>
+    </div>
+
+    <!-- Таблица результатов -->
+    <div class="section results-block">
+      <h2>Результаты проверок</h2>
+      <app-results-table [results]="results"></app-results-table>
+    </div>
+  </main>
+</div>
